@@ -31,7 +31,7 @@ function Navbar({ user, onLogout }) {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <img src={logo} alt="Logo" className="h-20 w-100" />
+            <img src={logo} alt="Logo" className="h-16 w-100" />
           </Link>
 
           {/* Desktop Menu */}

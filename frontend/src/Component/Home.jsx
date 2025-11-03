@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+
 function Home({ user }) {
   const navigate = useNavigate();
 
@@ -305,115 +306,136 @@ function Home({ user }) {
       </section>
     </div>
   );
+//___________________________________________________________________________________________________________________________________________
 
   // Render Guest Home Page
+  
   const renderGuestHome = () => (
-    <div className="bg-linear-to-b from-blue-50 to-white shadow-2xl ">
+    <div className="bg-linear-to-b from-blue-10 to-blue-300 shadow-3xl ">
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6  lg:px-8 py-20 ">
         <div className="text-center ">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Welcome to College Alumni Portal
+          <h1 className="text-6xl font-bold text-gray-900 mb-10">
+            Welcome to Gulzar Group of Institutions Alumni Portal
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-2xl text-gray-600 mb-8">
             Connect with alumni, find opportunities, and grow your network
           </p>
           <div className="flex justify-center space-x-4">
             <Link
-              to="/register"
-              className="btn-primary text-lg p-2 rounded-2xl shadow-2xl hover:bg-blue-500 transition duration-300 ease-in-out bg-blue-200"
-            >
-              Get Started
-            </Link>
-            <Link
-              to="/alumni"
-              className="bbtn-primary text-lg p-2 rounded-2xl shadow-2xl hover:bg-blue-500 transition duration-300 ease-in-out bg-blue-20"
-            >
-              Explore Alumni
-            </Link>
+  to="/register"
+  className="text-white text-lg px-6 py-3 rounded-full bg-blue-600 shadow-xl transition duration-300 ease-in-out"
+  style={{ transition: "background-color 0.3s ease-in-out" }}
+  onMouseEnter={(e) => (e.target.style.backgroundColor = "hsl(45.76,95.16%,51.37%)")}
+  onMouseLeave={(e) => (e.target.style.backgroundColor = "")}
+>
+  Get Started
+</Link>
+
+<Link
+  to="/alumni"
+  className="text-white text-lg px-6 py-3 rounded-full bg-blue-600 shadow-xl transition duration-300 ease-in-out"
+  style={{ transition: "background-color 0.3s ease-in-out" }}
+  onMouseEnter={(e) => (e.target.style.backgroundColor = "hsl(45.76,95.16%,51.37%)")}
+  onMouseLeave={(e) => (e.target.style.backgroundColor = "")}
+>
+  Explore Alumni
+</Link>
+
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="card text-center">
-              <div className="text-4xl mb-4">🤝</div>
-              <h3 className="text-xl font-bold mb-2">Networking</h3>
-              <p className="text-gray-600">
-                Connect with alumni and students from your college. Build
-                meaningful relationships and expand your professional network.
-              </p>
-            </div>
+<section className="bg-gradient-to-b from-white to-gray-50 py-20">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-16 tracking-tight">
+      ✨ Our Features
+    </h2>
 
-            {/* Feature 2 */}
-            <div className="card text-center">
-              <div className="text-4xl mb-4">💼</div>
-              <h3 className="text-xl font-bold mb-2">Job Opportunities</h3>
-              <p className="text-gray-600">
-                Access exclusive job postings and internship opportunities
-                shared by alumni and industry professionals.
-              </p>
-            </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+      {/* Feature 1 */}
+      <div className="bg-white backdrop-blur-lg bg-opacity-80 border border-gray-200 rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition duration-300 hover:-translate-y-1">
+        <div className="text-5xl mb-4 animate-bounce">🤝</div>
+        <h3 className="text-2xl font-semibold mb-3 text-gray-900">Networking</h3>
+        <p className="text-gray-600 leading-relaxed">
+          Connect with alumni and students from your college. Build meaningful relationships and expand your professional network.
+        </p>
+      </div>
 
-            {/* Feature 3 */}
-            <div className="card text-center">
-              <div className="text-4xl mb-4">🎓</div>
-              <h3 className="text-xl font-bold mb-2">Mentorship</h3>
-              <p className="text-gray-600">
-                Get guidance from experienced alumni through our mentorship
-                program. Learn from their experiences and insights.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Feature 2 */}
+      <div className="bg-white backdrop-blur-lg bg-opacity-80 border border-gray-200 rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition duration-300 hover:-translate-y-1">
+        <div className="text-5xl mb-4 animate-pulse">💼</div>
+        <h3 className="text-2xl font-semibold mb-3 text-gray-900">Job Opportunities</h3>
+        <p className="text-gray-600 leading-relaxed">
+          Access exclusive job postings and internship opportunities shared by alumni and industry professionals.
+        </p>
+      </div>
+
+      {/* Feature 3 */}
+      <div className="bg-white backdrop-blur-lg bg-opacity-80 border border-gray-200 rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition duration-300 hover:-translate-y-1">
+        <div className="text-5xl mb-4 animate-bounce">🎓</div>
+        <h3 className="text-2xl font-semibold mb-3 text-gray-900">Mentorship</h3>
+        <p className="text-gray-600 leading-relaxed">
+          Get guidance from experienced alumni through our mentorship program. Learn from their experiences and insights.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Stats Section */}
-      <section className="bg-blue-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold mb-2">5000+</div>
-              <p>Active Alumni</p>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">1000+</div>
-              <p>Job Postings</p>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">500+</div>
-              <p>Events</p>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">10000+</div>
-              <p>Students</p>
-            </div>
-          </div>
-        </div>
-      </section>
+<section className="bg-gradient-to-br from-yellow-50 via-white to-gray-100 py-20">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-16 tracking-tight">
+      📊 Alumni Portal Highlights
+    </h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 text-center">
+      {/* Stat Card */}
+      <div className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-3xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition duration-300">
+        <div className="text-5xl font-extrabold text-gray-900 mb-2">5000+</div>
+        <p className="text-lg text-gray-700">Active Alumni</p>
+      </div>
+
+      <div className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-3xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition duration-300">
+        <div className="text-5xl font-extrabold text-gray-900 mb-2">1000+</div>
+        <p className="text-lg text-gray-700">Job Postings</p>
+      </div>
+
+      <div className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-3xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition duration-300">
+        <div className="text-5xl font-extrabold text-gray-900 mb-2">500+</div>
+        <p className="text-lg text-gray-700">Events</p>
+      </div>
+
+      <div className="bg-white/70 backdrop-blur-md border border-gray-200 rounded-3xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition duration-300">
+        <div className="text-5xl font-extrabold text-gray-900 mb-2">10000+</div>
+        <p className="text-lg text-gray-700">Students</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
       {/* CTA Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Join?</h2>
-          <p className="text-gray-600 mb-8">
-            Start your journey with our alumni community today
-          </p>
-          <Link
-            to="/register"
-            className="btn-primary text-lg p-2 rounded-2xl shadow-2xl hover:bg-blue-500 transition duration-300 ease-in-out bg-blue-200"
-          >
-            Register Now
-          </Link>
-        </div>
-      </section>
+<section className="bg-gray-100 py-20">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 className="text-4xl font-extrabold mb-4 text-gray-800">Ready to Join?</h2>
+    <p className="text-lg text-gray-600 mb-8">
+      Start your journey with our alumni community today.
+    </p>
+    <Link
+      to="/register"
+      className="text-white text-lg px-8 py-3 rounded-full bg-blue-600 shadow-xl transition duration-300 ease-in-out hover:bg-[hsl(45.76,95.16%,51.37%)]"
+    >
+      Register Now
+    </Link>
+  </div>
+</section>
     </div>
   );
+  //________________________________________________________________________________________________________________________________________________________________________________________________________
 
   // Main render logic - show appropriate home page based on user role
   if (user) {
