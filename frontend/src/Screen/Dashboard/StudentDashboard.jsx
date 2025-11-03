@@ -33,7 +33,8 @@ function StudentDashboard({ user }) {
 
       // Fetch recent jobs
       const jobResponse = await fetch(
-        "http://localhost:5000/api/jobs?isActive=true"
+        
+        "http://localhost:5000/api/jobs"
       );
       const jobData = await jobResponse.json();
       if (jobData.success) {

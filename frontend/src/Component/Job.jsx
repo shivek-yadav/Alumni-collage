@@ -53,6 +53,7 @@ function Jobs() {
     try {
       setLoading(true);
       let url = "http://localhost:5000/api/jobs?isActive=true";
+      // let url = "http://localhost:5000/api/jobs";
 
       if (filters.jobType) url += `&jobType=${filters.jobType}`;
       if (filters.company) url += `&company=${filters.company}`;

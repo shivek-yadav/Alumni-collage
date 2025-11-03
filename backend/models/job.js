@@ -9,10 +9,15 @@ const jobSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
+    isActive: {
+        type: Boolean,
+        default: true, // ✅ Ensures jobs show up in student dashboard
+    },
     datePosted: {
         type: Date,
         default: Date.now,
     },
+
 });
 
 const Job = mongoose.model('Job', jobSchema);
