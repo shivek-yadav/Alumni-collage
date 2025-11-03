@@ -53,9 +53,14 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-500 p-4">
-      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0270b4] to-[#014f87] bg-cover bg-center p-6"
+      style={{
+        backgroundImage: "url('/images/ggi-campus.jpg')", // Replace with your actual image path
+      }}
+    >
+      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg border border-gray-200 backdrop-blur-md bg-opacity-95">
+        <h2 className="text-4xl font-extrabold text-center mb-6 text-[#0270b4]">
           Register
         </h2>
 
@@ -65,88 +70,78 @@ function Register() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Full Name
-            </label>
+            <label className="block font-semibold mb-2 text-gray-700">Full Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="input-field w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 border border-gray-300 rounded-lg text-black bg-white focus:outline-none focus:ring-2 focus:ring-[#f9c10d]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Email
-            </label>
+            <label className="block font-semibold mb-2 text-gray-700">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="input-field w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 border border-gray-300 rounded-lg text-black bg-white focus:outline-none focus:ring-2 focus:ring-[#f9c10d]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Password
-            </label>
+            <label className="block font-semibold mb-2 text-gray-700">Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="input-field w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 border border-gray-300 rounded-lg text-black bg-white focus:outline-none focus:ring-2 focus:ring-[#f9c10d]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Role</label>
+            <label className="block font-semibold mb-2 text-gray-700">Role</label>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="input-field"
+              className="w-full p-3 border border-gray-300 rounded-lg text-black bg-white focus:outline-none focus:ring-2 focus:ring-[#f9c10d]"
             >
               <option value="student">Student</option>
               <option value="alumni">Alumni</option>
-              {/* <option value="admin">Admin</option> */}
+              <option value="admin">Admin</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Branch
-            </label>
+            <label className="block font-semibold mb-2 text-gray-700">Branch</label>
             <input
               type="text"
               name="branch"
               value={formData.branch}
               onChange={handleChange}
-              className="input-field w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="e.g., Computer Science"
+              className="w-full p-3 border border-gray-300 rounded-lg text-black bg-white focus:outline-none focus:ring-2 focus:ring-[#f9c10d]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Graduation Year
-            </label>
+            <label className="block font-semibold mb-2 text-gray-700">Graduation Year</label>
             <input
               type="number"
               name="graduationYear"
               value={formData.graduationYear}
               onChange={handleChange}
-              className="input-field w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 border border-gray-300 rounded-lg text-black bg-white focus:outline-none focus:ring-2 focus:ring-[#f9c10d]"
               required
             />
           </div>
@@ -154,18 +149,15 @@ function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 transition"
+            className="w-full bg-[#f9c10d] text-[#002147] font-semibold p-3 rounded-lg hover:bg-yellow-400 transition duration-300"
           >
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
-        <p className="text-center text-gray-600 mt-6">
+              <p className="text-center text-gray-600 mt-6">
           Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-blue-600 font-semibold hover:underline"
-          >
+          <Link to="/login" className="text-[#f9c10d] font-semibold hover:underline">
             Login here
           </Link>
         </p>

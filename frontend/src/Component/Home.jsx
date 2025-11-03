@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Home({ user }) {
   const navigate = useNavigate();
-
+//------------------------------------------------------------------------------------------------------------------
   // Render Student Home Page
   const renderStudentHome = () => (
     <div className="bg-linear-to-b from-blue-50 to-white">
@@ -101,7 +101,7 @@ function Home({ user }) {
       </section>
     </div>
   );
-
+//------------------------------------------------------------------------------------------------------------------
   // Render Alumni Home Page
   const renderAlumniHome = () => (
     <div className="bg-linear-to-b from-green-50 to-white">
@@ -202,7 +202,7 @@ function Home({ user }) {
       </section>
     </div>
   );
-
+//------------------------------------------------------------------------------------------------------------------------
   // Render Admin/College Home Page
   const renderAdminHome = () => (
     <div className="bg-linear-to-b from-purple-50 to-white">
@@ -213,7 +213,7 @@ function Home({ user }) {
             College Admin Dashboard  🏫
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Manage the alumni portal and oversee community activities 
+            Manage the alumni portal and oversee community activities
           </p>
           <div className="flex justify-center space-x-4 flex-wrap">
             <Link to="/admin-dashboard" className="btn-primary text-lg">
@@ -240,7 +240,7 @@ function Home({ user }) {
               <div className="text-4xl mb-4">👥</div>
               <h3 className="text-xl font-bold mb-2">User Management</h3>
               <p className="text-gray-600 mb-4">
-                Monitor and manage student and alumni accounts and update 
+                Monitor and manage student and alumni accounts and update
               </p>
               <button
                 onClick={() => navigate("/admin-dashboard")}
