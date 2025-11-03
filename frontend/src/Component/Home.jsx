@@ -210,10 +210,10 @@ function Home({ user }) {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            College Admin Dashboard 🏫
+            College Admin Dashboard  🏫
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Manage the alumni portal and oversee community activities
+            Manage the alumni portal and oversee community activities 
           </p>
           <div className="flex justify-center space-x-4 flex-wrap">
             <Link to="/admin-dashboard" className="btn-primary text-lg">
@@ -240,7 +240,7 @@ function Home({ user }) {
               <div className="text-4xl mb-4">👥</div>
               <h3 className="text-xl font-bold mb-2">User Management</h3>
               <p className="text-gray-600 mb-4">
-                Monitor and manage student and alumni accounts
+                Monitor and manage student and alumni accounts and update 
               </p>
               <button
                 onClick={() => navigate("/admin-dashboard")}
