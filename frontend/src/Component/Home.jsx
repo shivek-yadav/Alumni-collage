@@ -95,7 +95,7 @@ function Home({ user }) {
             opportunities
           </p>
           <Link to="/edit-profile" className="btn-primary text-lg inline-block">
-            ✏️ Complete Your Profile
+            ✏ Complete Your Profile
           </Link>
         </div>
       </section>
@@ -309,7 +309,7 @@ function Home({ user }) {
 //___________________________________________________________________________________________________________________________________________
 
   // Render Guest Home Page
-  
+
   const renderGuestHome = () => (
     <div className="bg-linear-to-b from-blue-10 to-blue-300 shadow-3xl ">
       {/* Hero Section */}
