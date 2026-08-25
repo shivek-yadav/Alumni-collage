@@ -1,4 +1,5 @@
-
+import { configDotenv } from 'dotenv';
+configDotenv()
 
 import mongoose from 'mongoose';
 

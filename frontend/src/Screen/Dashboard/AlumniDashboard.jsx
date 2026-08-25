@@ -127,8 +127,6 @@ function AlumniDashboard({ user }) {
     setProcessingApplication(applicationIndex);
     try {
       const token = localStorage.getItem("token");
-      const application =
-        selectedJobForApplications.applications[applicationIndex];
 
       const response = await fetch(
         `http://localhost:5000/api/jobs/${selectedJobForApplications._id}/applications/${applicationIndex}/${action}`,
@@ -265,424 +263,527 @@ function AlumniDashboard({ user }) {
   };
 
   if (loading) {
-    return <div className="text-center py-12">Loading dashboard...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] bg-slate-950 text-slate-300">
+        <div className="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mb-4" />
+        <p className="text-sm font-medium text-slate-400">Loading mentor dashboard...</p>
+      </div>
+    );
   }
 
+  const statMetrics = [
+    {
+      title: "Jobs Posted",
+      value: jobs.length,
+      color: "text-blue-400",
+      badge: "Active listings",
+    },
+    {
+      title: "Events Hosted",
+      value: events.length,
+      color: "text-emerald-400",
+      badge: "Organized",
+    },
+    {
+      title: "Mentorship Requests",
+      value: mentorshipRequests.length,
+      color: "text-purple-400",
+      badge: "Pending reply",
+    },
+    {
+      title: "Network Connections",
+      value: connections.length,
+      color: "text-teal-400",
+      badge: "Active network",
+    },
+  ];
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-bold mb-8">Welcome, {user.name}! 👋</h1>
+    <div className="min-h-screen bg-slate-950 text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wide uppercase mb-3">
+              Alumni & Mentor Portal
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+              Welcome Back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">{user.name}</span>
+            </h1>
+            <p className="text-sm text-slate-400 mt-1">
+              Manage your published career opportunities, organize workshops, and guide students.
+            </p>
+          </div>
+        </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6  mb-12 shadow-2xl rounded-2xl bg-gray-200 ">
-        <div className="card text-center">
-          <div className="text-3xl font-bold text-blue-600">{jobs.length}</div>
-          <p className="text-gray-600">Jobs Posted</p>
-        </div>
-        <div className="card text-center">
-          <div className="text-3xl font-bold text-green-600">
-            {events.length}
-          </div>
-          <p className="text-gray-600">Events Created</p>
-        </div>
-        <div className="card text-center">
-          <div className="text-3xl font-bold text-purple-600">
-            {mentorshipRequests.length}
-          </div>
-          <p className="text-gray-600">Mentorship Requests</p>
-        </div>
-        <div className="card text-center">
-          <div className="text-3xl font-bold text-orange-600">
-            {connections.length}
-          </div>
-          <p className="text-gray-600">Connections</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Mentorship Requests */}
-          {mentorshipRequests.length > 0 && (
-            <div className="card">
-              <h2 className="text-2xl font-bold mb-4">Mentorship Requests</h2>
-              <div className="space-y-4">
-                {mentorshipRequests.map((req) => (
-                  <div
-                    key={req._id}
-                    className="border-l-4 border-purple-500 pl-4 py-2"
-                  >
-                    <p className="font-semibold">{req.requester.name}</p>
-                    <p className="text-gray-600 text-sm">{req.message}</p>
-                    <div className="flex gap-2 mt-2">
-                      <button
-                        onClick={() =>
-                          handleMentorshipResponse(req._id, "accept")
-                        }
-                        disabled={processingRequest === req._id}
-                        className="btn-primary text-sm disabled:opacity-50"
-                      >
-                        {processingRequest === req._id
-                          ? "Processing..."
-                          : "Accept"}
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleMentorshipResponse(req._id, "decline")
-                        }
-                        disabled={processingRequest === req._id}
-                        className="btn-secondary text-sm disabled:opacity-50"
-                      >
-                        {processingRequest === req._id
-                          ? "Processing..."
-                          : "Decline"}
-                      </button>
-                    </div>
-                  </div>
-                ))}
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {statMetrics.map((stat, idx) => (
+            <div
+              key={idx}
+              className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-lg shadow-black/20 flex flex-col justify-between"
+            >
+              <span className="text-xs uppercase font-bold tracking-wider text-slate-400">
+                {stat.title}
+              </span>
+              <div className="mt-4 flex items-baseline justify-between">
+                <span className={`text-3xl font-extrabold ${stat.color}`}>
+                  {stat.value}
+                </span>
+                <span className="text-[10px] font-semibold text-slate-500">
+                  {stat.badge}
+                </span>
               </div>
             </div>
-          )}
+          ))}
+        </div>
 
-          {/* My Jobs */}
-          <div className="card bg-gray-100 p-2 rounded shadow-xl ">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">My Job Postings</h2>
-              <button
-                onClick={() => setShowJobForm(!showJobForm)}
-                className="btn-primary text-sm hover:text-blue-500 "
-              >
-                + Post Job
-              </button>
-            </div>
-
-            {showJobForm && (
-              <form
-                onSubmit={handleJobSubmit}
-                className="mb-6 p-4 bg-gray-50 rounded-lg space-y-4"
-              >
-                <input
-                  type="text"
-                  placeholder="Job Title"
-                  className="input-field"
-                  value={jobFormData.title}
-                  onChange={(e) =>
-                    setJobFormData({ ...jobFormData, title: e.target.value })
-                  }
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Company"
-                  className="input-field"
-                  value={jobFormData.company}
-                  onChange={(e) =>
-                    setJobFormData({ ...jobFormData, company: e.target.value })
-                  }
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Location"
-                  className="input-field"
-                  value={jobFormData.location}
-                  onChange={(e) =>
-                    setJobFormData({ ...jobFormData, location: e.target.value })
-                  }
-                  required
-                />
-                <textarea
-                  placeholder="Job Description"
-                  className="input-field"
-                  rows="4"
-                  value={jobFormData.description}
-                  onChange={(e) =>
-                    setJobFormData({
-                      ...jobFormData,
-                      description: e.target.value,
-                    })
-                  }
-                  required
-                ></textarea>
-                <select
-                  className="input-field"
-                  value={jobFormData.jobType}
-                  onChange={(e) =>
-                    setJobFormData({ ...jobFormData, jobType: e.target.value })
-                  }
-                >
-                  <option>Full-time</option>
-                  <option>Part-time</option>
-                  <option>Internship</option>
-                  <option>Contract</option>
-                </select>
-                <input
-                  type="date"
-                  placeholder="Application Deadline"
-                  className="input-field"
-                  value={jobFormData.applicationDeadline}
-                  onChange={(e) =>
-                    setJobFormData({
-                      ...jobFormData,
-                      applicationDeadline: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <div className="flex gap-2">
-                  <button
-                    type="submit"
-                    className="btn-primary"
-                    disabled={submitting}
-                  >
-                    {submitting ? "Posting..." : "Post Job"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowJobForm(false)}
-                    className="btn-secondary"
-                  >
-                    Cancel
-                  </button>
+        {/* Two Column Layout: Main Actions & Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* Main Feed Column */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Mentorship Requests Notification Panel */}
+            {mentorshipRequests.length > 0 && (
+              <div className="bg-slate-900 border border-purple-500/30 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="flex items-center gap-2 mb-6">
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse" />
+                  <h2 className="text-lg font-bold text-white tracking-tight">
+                    Pending Mentorship Requests ({mentorshipRequests.length})
+                  </h2>
                 </div>
-              </form>
+
+                <div className="space-y-4">
+                  {mentorshipRequests.map((req) => (
+                    <div
+                      key={req._id}
+                      className="p-4 bg-slate-950/60 border border-slate-800 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div>
+                        <h4 className="text-sm font-bold text-white">
+                          {req.requester.name}
+                        </h4>
+                        <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                          "{req.message}"
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => handleMentorshipResponse(req._id, "accept")}
+                          disabled={processingRequest === req._id}
+                          className="py-1.5 px-3.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-md shadow-emerald-600/20 active:scale-95 transition"
+                        >
+                          {processingRequest === req._id ? "Processing..." : "Accept"}
+                        </button>
+                        <button
+                          onClick={() => handleMentorshipResponse(req._id, "decline")}
+                          disabled={processingRequest === req._id}
+                          className="py-1.5 px-3.5 bg-slate-800 hover:bg-slate-750 disabled:opacity-50 text-slate-300 font-semibold text-xs rounded-xl border border-slate-700 active:scale-95 transition"
+                        >
+                          {processingRequest === req._id ? "Processing..." : "Decline"}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
 
-            <div className="space-y-4">
-              {jobs.map((job) => (
-                <div key={job._id} className="border-b pb-4 last:border-b-0">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="font-bold">{job.title}</h3>
-                      <p className="text-gray-600 text-sm">
-                        {job.company} • {job.location}
+            {/* My Job Postings */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-lg font-bold text-white">My Job Postings</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Manage active vacancies and inspect student applicants.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowJobForm(!showJobForm)}
+                  className="py-2 px-4 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl shadow-md shadow-blue-600/25 active:scale-95 transition"
+                >
+                  {showJobForm ? "Close Form" : "+ Post New Opportunity"}
+                </button>
+              </div>
+
+              {/* Collapsible Job Submission Form */}
+              {showJobForm && (
+                <form
+                  onSubmit={handleJobSubmit}
+                  className="mb-8 p-6 bg-slate-950/70 border border-slate-800 rounded-2xl space-y-4"
+                >
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">
+                    Create Career Posting
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Job Title (e.g., Associate Engineer)"
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500"
+                      value={jobFormData.title}
+                      onChange={(e) =>
+                        setJobFormData({ ...jobFormData, title: e.target.value })
+                      }
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Company Name"
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500"
+                      value={jobFormData.company}
+                      onChange={(e) =>
+                        setJobFormData({ ...jobFormData, company: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Location (e.g., Remote / Noida)"
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500"
+                      value={jobFormData.location}
+                      onChange={(e) =>
+                        setJobFormData({ ...jobFormData, location: e.target.value })
+                      }
+                      required
+                    />
+                    <select
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                      value={jobFormData.jobType}
+                      onChange={(e) =>
+                        setJobFormData({ ...jobFormData, jobType: e.target.value })
+                      }
+                    >
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Internship">Internship</option>
+                      <option value="Contract">Contract</option>
+                    </select>
+                  </div>
+
+                  <textarea
+                    placeholder="Job Description & Responsibilities..."
+                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500"
+                    rows="4"
+                    value={jobFormData.description}
+                    onChange={(e) =>
+                      setJobFormData({
+                        ...jobFormData,
+                        description: e.target.value,
+                      })
+                    }
+                    required
+                  />
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                      Application Deadline
+                    </label>
+                    <input
+                      type="date"
+                      className="w-full sm:w-1/2 px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                      value={jobFormData.applicationDeadline}
+                      onChange={(e) =>
+                        setJobFormData({
+                          ...jobFormData,
+                          applicationDeadline: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <button
+                      type="submit"
+                      className="py-2.5 px-5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl shadow-md shadow-blue-600/20 active:scale-95 transition"
+                      disabled={submitting}
+                    >
+                      {submitting ? "Publishing..." : "Publish Job Posting"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowJobForm(false)}
+                      className="py-2.5 px-4 bg-slate-800 hover:bg-slate-750 text-slate-300 font-semibold text-xs rounded-xl transition"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* Jobs List */}
+              <div className="divide-y divide-slate-850">
+                {jobs.map((job) => (
+                  <div key={job._id} className="py-4 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-bold text-sm text-white">{job.title}</h3>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        {job.company} • {job.location} • <span className="text-blue-400 font-medium">{job.jobType}</span>
                       </p>
                     </div>
-                    <div className="flex gap-2 items-center">
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold">
-                        {job.applications?.length || 0} Applications
+
+                    <div className="flex items-center gap-2">
+                      <span className="bg-slate-800 border border-slate-750 text-slate-300 px-3 py-1 rounded-xl text-xs font-semibold">
+                        {job.applications?.length || 0} Applicants
                       </span>
                       {job.applications && job.applications.length > 0 && (
                         <button
                           onClick={() => handleViewApplications(job)}
-                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs font-semibold"
+                          className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded-xl text-xs font-semibold active:scale-95 transition"
                         >
-                          👁️ View
+                          Review
                         </button>
                       )}
                     </div>
                   </div>
+                ))}
+                {jobs.length === 0 && (
+                  <p className="text-xs text-slate-500 py-6 text-center italic">
+                    You haven't posted any jobs yet.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* My Events */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-lg font-bold text-white">My Scheduled Events</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Sessions, webinars, and technical workshops you are organizing.
+                  </p>
                 </div>
-              ))}
-              {jobs.length === 0 && (
-                <p className="text-gray-600">No jobs posted yet</p>
+                <button
+                  onClick={() => setShowEventForm(!showEventForm)}
+                  className="py-2 px-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl shadow-md shadow-emerald-600/25 active:scale-95 transition"
+                >
+                  {showEventForm ? "Close Form" : "+ Create Event"}
+                </button>
+              </div>
+
+              {/* Collapsible Event Creation Form */}
+              {showEventForm && (
+                <form
+                  onSubmit={handleEventSubmit}
+                  className="mb-8 p-6 bg-slate-950/70 border border-slate-800 rounded-2xl space-y-4"
+                >
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">
+                    Organize Community Session
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Event Title"
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500"
+                      value={eventFormData.title}
+                      onChange={(e) =>
+                        setEventFormData({
+                          ...eventFormData,
+                          title: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                    <select
+                      className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                      value={eventFormData.eventType}
+                      onChange={(e) =>
+                        setEventFormData({
+                          ...eventFormData,
+                          eventType: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="workshop">Workshop</option>
+                      <option value="seminar">Seminar</option>
+                      <option value="conference">Conference</option>
+                      <option value="reunion">Reunion</option>
+                      <option value="networking">Networking</option>
+                    </select>
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="Location / Platform (e.g. Google Meet, Zoom, Hall 3)"
+                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500"
+                    value={eventFormData.location}
+                    onChange={(e) =>
+                      setEventFormData({
+                        ...eventFormData,
+                        location: e.target.value,
+                      })
+                    }
+                    required
+                  />
+
+                  <textarea
+                    placeholder="Event Description & Key Takeaways..."
+                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500"
+                    rows="4"
+                    value={eventFormData.description}
+                    onChange={(e) =>
+                      setEventFormData({
+                        ...eventFormData,
+                        description: e.target.value,
+                      })
+                    }
+                    required
+                  />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                        Start Date & Time
+                      </label>
+                      <input
+                        type="datetime-local"
+                        className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                        value={eventFormData.startDate}
+                        onChange={(e) =>
+                          setEventFormData({
+                            ...eventFormData,
+                            startDate: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                        End Date & Time
+                      </label>
+                      <input
+                        type="datetime-local"
+                        className="w-full px-4 py-2.5 bg-slate-800 border border-slate-750 rounded-xl text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                        value={eventFormData.endDate}
+                        onChange={(e) =>
+                          setEventFormData({
+                            ...eventFormData,
+                            endDate: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <button
+                      type="submit"
+                      className="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-md shadow-emerald-600/20 active:scale-95 transition"
+                      disabled={submitting}
+                    >
+                      {submitting ? "Submitting..." : "Submit Event"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowEventForm(false)}
+                      className="py-2.5 px-4 bg-slate-800 hover:bg-slate-750 text-slate-300 font-semibold text-xs rounded-xl transition"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
               )}
+
+              {/* Events List */}
+              <div className="divide-y divide-slate-850">
+                {events.map((event) => (
+                  <div key={event._id} className="py-4 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h3 className="font-bold text-sm text-white">{event.title}</h3>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        📍 {event.location} • {new Date(event.startDate).toLocaleDateString()}
+                      </p>
+                    </div>
+
+                    <div>
+                      {!event.isApproved ? (
+                        <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1 rounded-xl text-xs font-semibold">
+                          Pending Approval
+                        </span>
+                      ) : (
+                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-xl text-xs font-semibold">
+                          ✓ Published
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {events.length === 0 && (
+                  <p className="text-xs text-slate-500 py-6 text-center italic">
+                    No community events scheduled yet.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* My Events */}
-          <div className="card bg-gray-100 p-2 rounded shadow-xl">
-            <div className="flex justify-between items-center mb-4 ">
-              <h2 className="text-2xl font-bold">My Events</h2>
+          {/* Right Sidebar */}
+          <div className="space-y-6">
+            {/* Profile Overview Card */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-sm">
+                  {user.name ? user.name.slice(0, 2).toUpperCase() : "AL"}
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">{user.name}</h3>
+                  <span className="text-[11px] text-emerald-400 capitalize font-medium">
+                    Verified Mentor
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2 text-xs text-slate-300 py-3 border-y border-slate-850">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Company</span>
+                  <span className="font-semibold text-white truncate max-w-[140px]">{user.currentCompany || "Not specified"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Designation</span>
+                  <span className="font-semibold text-white truncate max-w-[140px]">{user.designation || "Not specified"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Domain</span>
+                  <span className="font-semibold text-white">{user.branch || "General"}</span>
+                </div>
+              </div>
+
               <button
-                onClick={() => setShowEventForm(!showEventForm)}
-                className="btn-primary text-sm  hover:text-blue-500"
+                onClick={() => navigate("/edit-profile")}
+                className="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700/80 active:scale-95 transition"
               >
-                + Create Event
+                Edit Profile
               </button>
             </div>
 
-            {showEventForm && (
-              <form
-                onSubmit={handleEventSubmit}
-                className="mb-6 p-4 bg-gray-50 rounded-lg space-y-4"
-              >
-                <input
-                  type="text"
-                  placeholder="Event Title"
-                  className="input-field"
-                  value={eventFormData.title}
-                  onChange={(e) =>
-                    setEventFormData({
-                      ...eventFormData,
-                      title: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <textarea
-                  placeholder="Event Description"
-                  className="input-field"
-                  rows="4"
-                  value={eventFormData.description}
-                  onChange={(e) =>
-                    setEventFormData({
-                      ...eventFormData,
-                      description: e.target.value,
-                    })
-                  }
-                  required
-                ></textarea>
-                <input
-                  type="text"
-                  placeholder="Location"
-                  className="input-field"
-                  value={eventFormData.location}
-                  onChange={(e) =>
-                    setEventFormData({
-                      ...eventFormData,
-                      location: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <select
-                  className="input-field"
-                  value={eventFormData.eventType}
-                  onChange={(e) =>
-                    setEventFormData({
-                      ...eventFormData,
-                      eventType: e.target.value,
-                    })
-                  }
-                >
-                  <option value="workshop">Workshop</option>
-                  <option value="seminar">Seminar</option>
-                  <option value="conference">Conference</option>
-                  <option value="reunion">Reunion</option>
-                  <option value="networking">Networking</option>
-                </select>
-                <input
-                  type="datetime-local"
-                  placeholder="Start Date"
-                  className="input-field"
-                  value={eventFormData.startDate}
-                  onChange={(e) =>
-                    setEventFormData({
-                      ...eventFormData,
-                      startDate: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <input
-                  type="datetime-local"
-                  placeholder="End Date"
-                  className="input-field"
-                  value={eventFormData.endDate}
-                  onChange={(e) =>
-                    setEventFormData({
-                      ...eventFormData,
-                      endDate: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <div className="flex gap-2">
-                  <button
-                    type="submit"
-                    className="btn-primary"
-                    disabled={submitting}
-                  >
-                    {submitting ? "Creating..." : "Create Event"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowEventForm(false)}
-                    className="btn-secondary"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            )}
-
-            <div className="space-y-4">
-              {events.map((event) => (
-                <div key={event._id} className="border-b pb-4 last:border-b-0">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-bold">{event.title}</h3>
-                      <p className="text-gray-600 text-sm">{event.location}</p>
-                      <p className="text-sm mt-2">
-                        {new Date(event.startDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                    {!event.isApproved && (
-                      <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-semibold">
-                        ⏳ Pending
-                      </span>
-                    )}
-                    {event.isApproved && (
-                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">
-                        ✓ Approved
-                      </span>
-                    )}
+            {/* Recent Connections Card */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+              <h3 className="text-xs uppercase font-bold tracking-wider text-slate-400 mb-4">
+                Recent Network Links
+              </h3>
+              <div className="space-y-3 text-xs">
+                {connections.slice(0, 5).map((conn) => (
+                  <div key={conn._id} className="flex items-center justify-between p-2 rounded-xl bg-slate-950/40 border border-slate-850">
+                    <span className="font-medium text-slate-300">
+                      {conn.requester._id === user._id
+                        ? conn.recipient.name
+                        : conn.requester.name}
+                    </span>
+                    <span className="text-[10px] text-emerald-400 font-semibold">Active</span>
                   </div>
-                </div>
-              ))}
-              {events.length === 0 && (
-                <p className="text-gray-600">No events created yet</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Profile Card */}
-          <div className="card bg-gray-100 p-2 rounded shadow-xl">
-            <h3 className="text-xl font-bold mb-4">My Profile</h3>
-            <div className="space-y-2 text-sm">
-              <p>
-                <strong>Company:</strong> {user.currentCompany || "Not set"}
-              </p>
-              <p>
-                <strong>Designation:</strong> {user.designation || "Not set"}
-              </p>
-              <p>
-                <strong>Branch:</strong> {user.branch}
-              </p>
-            </div>
-            <button
-              onClick={() => navigate("/edit-profile")}
-              className="w-full btn-primary mt-4"
-            >
-              ✏️ Edit Profile
-            </button>
-          </div>
-
-          {/* Quick Stats */}
-          <div className="card bg-gray-100 p-2 rounded shadow-xl">
-            <h3 className="text-xl font-bold mb-4">Quick Stats</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span>Profile Views</span>
-                <span className="font-bold">0</span>
+                ))}
+                {connections.length === 0 && (
+                  <p className="text-slate-500 italic text-center py-2">No connections yet.</p>
+                )}
               </div>
-              <div className="flex justify-between">
-                <span>Job Applications</span>
-                <span className="font-bold">0</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Event Registrations</span>
-                <span className="font-bold">0</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Recent Connections */}
-          <div className="card">
-            <h3 className="text-xl font-bold mb-4">Recent Connections</h3>
-            <div className="space-y-2">
-              {connections.slice(0, 5).map((conn) => (
-                <div key={conn._id} className="text-sm">
-                  <p className="font-semibold">
-                    {conn.requester._id === user._id
-                      ? conn.recipient.name
-                      : conn.requester.name}
-                  </p>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -690,21 +791,20 @@ function AlumniDashboard({ user }) {
 
       {/* Applications Modal */}
       {showApplications && selectedJobForApplications && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-96 overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b p-6 flex justify-between items-center">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto">
+            <div className="sticky top-0 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 p-6 flex justify-between items-center z-10">
               <div>
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-lg font-bold text-white tracking-tight">
                   Applications for {selectedJobForApplications.title}
                 </h2>
-                <p className="text-gray-600 text-sm">
-                  {selectedJobForApplications.applications?.length || 0}{" "}
-                  applications
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {selectedJobForApplications.applications?.length || 0} candidate submissions
                 </p>
               </div>
               <button
                 onClick={handleCloseApplications}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
+                className="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition"
               >
                 ✕
               </button>
@@ -717,101 +817,83 @@ function AlumniDashboard({ user }) {
                   (application, idx) => (
                     <div
                       key={idx}
-                      className="border rounded-lg p-4 hover:shadow-md transition"
+                      className="bg-slate-950/60 border border-slate-800 rounded-2xl p-5 space-y-3"
                     >
-                      <div className="flex justify-between items-start mb-3">
+                      <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-bold text-lg">
-                            {application.user?.name || "Anonymous"}
+                          <h3 className="font-bold text-sm text-white">
+                            {application.user?.name || "Applicant"}
                           </h3>
-                          <p className="text-gray-600 text-sm">
+                          <p className="text-xs text-slate-400">
                             {application.user?.email || "No email"}
                           </p>
                         </div>
-                        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-semibold">
-                          Applied
+                        <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full text-[10px] font-semibold">
+                          Submitted
                         </span>
                       </div>
 
-                      <div className="space-y-2 mb-3">
-                        {application.user?.currentCompany && (
-                          <p className="text-sm">
-                            <strong>Company:</strong>{" "}
-                            {application.user.currentCompany}
-                          </p>
-                        )}
-                        {application.user?.designation && (
-                          <p className="text-sm">
-                            <strong>Designation:</strong>{" "}
-                            {application.user.designation}
-                          </p>
-                        )}
-                        {application.user?.branch && (
-                          <p className="text-sm">
-                            <strong>Branch:</strong> {application.user.branch}
-                          </p>
-                        )}
+                      <div className="grid grid-cols-2 gap-2 text-xs text-slate-300 py-2 border-y border-slate-850">
+                        <div>
+                          <span className="text-slate-500 block">Branch / Domain</span>
+                          <span className="font-medium text-white">{application.user?.branch || "N/A"}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 block">Resume Link</span>
+                          {application.resume ? (
+                            <a
+                              href={application.resume}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-blue-300 hover:underline inline-flex items-center gap-1 font-medium"
+                            >
+                              View PDF ↗
+                            </a>
+                          ) : (
+                            <span className="text-slate-500">Not provided</span>
+                          )}
+                        </div>
                       </div>
 
-                      {application.resume && (
-                        <div className="mb-3">
-                          <p className="text-sm font-semibold mb-1">Resume:</p>
-                          <a
-                            href={application.resume}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline text-sm break-all"
-                          >
-                            📄 View Resume
-                          </a>
-                        </div>
-                      )}
-
                       {application.coverLetter && (
-                        <div className="mb-3">
-                          <p className="text-sm font-semibold mb-1">
-                            Cover Letter:
+                        <div className="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                            Cover Note
                           </p>
-                          <p className="text-gray-700 text-sm bg-gray-50 p-2 rounded line-clamp-2">
+                          <p className="text-xs text-slate-300 leading-relaxed">
                             {application.coverLetter}
                           </p>
                         </div>
                       )}
 
-                      <div className="flex gap-2 pt-3 border-t">
+                      <div className="flex gap-2 pt-2">
                         <button
-                          onClick={() =>
-                            handleApplicationResponse(idx, "accept")
-                          }
+                          onClick={() => handleApplicationResponse(idx, "accept")}
                           disabled={processingApplication === idx}
-                          className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded text-sm font-semibold disabled:opacity-50"
+                          className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold shadow-md shadow-emerald-600/20 active:scale-95 transition disabled:opacity-50"
                         >
-                          {processingApplication === idx ? "⏳" : "✓"} Accept
+                          {processingApplication === idx ? "Saving..." : "Accept"}
                         </button>
                         <button
-                          onClick={() =>
-                            handleApplicationResponse(idx, "reject")
-                          }
+                          onClick={() => handleApplicationResponse(idx, "reject")}
                           disabled={processingApplication === idx}
-                          className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded text-sm font-semibold disabled:opacity-50"
+                          className="flex-1 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl text-xs font-semibold active:scale-95 transition disabled:opacity-50"
                         >
-                          {processingApplication === idx ? "⏳" : "✕"} Reject
+                          {processingApplication === idx ? "Saving..." : "Reject"}
                         </button>
                         <button
-                          onClick={() =>
-                            navigate(`/profile/${application.user?._id}`)
-                          }
-                          className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded text-sm font-semibold"
+                          onClick={() => navigate(`/profile/${application.user?._id}`)}
+                          className="py-2 px-3 bg-slate-800 hover:bg-slate-750 text-slate-300 rounded-xl text-xs font-semibold border border-slate-750 transition"
                         >
-                          👤 View Profile
+                          Profile
                         </button>
                       </div>
                     </div>
                   )
                 )
               ) : (
-                <p className="text-center text-gray-600 py-8">
-                  No applications yet
+                <p className="text-center text-slate-500 py-8 text-xs italic">
+                  No applications received yet.
                 </p>
               )}
             </div>

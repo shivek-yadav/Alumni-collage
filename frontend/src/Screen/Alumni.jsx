@@ -124,155 +124,212 @@ function Alumni({ user }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Header Section */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">Our Alumni Network</h1>
-        {currentUser && currentUser.role === "student" ? (
-          <p className="text-lg text-gray-600">
-            🤝 Connect with experienced alumni and expand your professional
-            network
-          </p>
-        ) : currentUser && currentUser.role === "alumni" ? (
-          <p className="text-lg text-gray-600">
-            👥 Browse and connect with fellow alumni from our community
-          </p>
+    <div className="min-h-screen bg-slate-950 text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold tracking-wide uppercase mb-3">
+            Alumni Directory
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
+            Professional Network
+          </h1>
+          {currentUser && currentUser.role === "student" ? (
+            <p className="text-sm sm:text-base text-slate-400">
+              Connect directly with verified alumni across industries for career mentorship and referral opportunities.
+            </p>
+          ) : currentUser && currentUser.role === "alumni" ? (
+            <p className="text-sm sm:text-base text-slate-400">
+              Explore and connect with fellow alumni across various cohorts and technical domains.
+            </p>
+          ) : (
+            <p className="text-sm sm:text-base text-slate-400">
+              Discover accomplished members across global companies and specialized domains.
+            </p>
+          )}
+        </div>
+
+        {/* Filters Toolbar */}
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-8 shadow-lg shadow-black/30">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+            Filter Alumni
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                Department / Branch
+              </label>
+              <input
+                type="text"
+                name="branch"
+                placeholder="e.g. Computer Science"
+                value={filters.branch}
+                onChange={handleFilterChange}
+                className="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                Company / Organization
+              </label>
+              <input
+                type="text"
+                name="company"
+                placeholder="e.g. Google, Microsoft, Startup"
+                value={filters.company}
+                onChange={handleFilterChange}
+                className="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                Skills & Tech Stack
+              </label>
+              <input
+                type="text"
+                name="skills"
+                placeholder="e.g. React, Node.js, Python"
+                value={filters.skills}
+                onChange={handleFilterChange}
+                className="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Alumni Grid */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 bg-slate-900/40 border border-slate-800 rounded-2xl">
+            <div className="w-8 h-8 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-3" />
+            <p className="text-sm text-slate-400">Loading alumni directory...</p>
+          </div>
+        ) : alumni.length === 0 ? (
+          <div className="text-center py-16 px-4 bg-slate-900/40 border border-slate-800 rounded-2xl">
+            <div className="w-12 h-12 rounded-xl bg-slate-800 text-slate-400 mx-auto flex items-center justify-center mb-3">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 className="text-base font-bold text-white mb-1">No alumni found</h3>
+            <p className="text-xs text-slate-400">Try adjusting your search criteria or clear the filters.</p>
+          </div>
         ) : (
-          <p className="text-lg text-gray-600">
-            Discover our vibrant alumni community and their professional
-            achievements
-          </p>
-        )}
-      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {alumni.map((person) => {
+              const isSent = sentRequests.includes(person._id);
+              const isPending = requestingConnection === person._id;
 
-      {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 className="text-xl font-bold mb-4">Filter Alumni</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <input
-            type="text"
-            name="branch"
-            placeholder="Filter by branch"
-            value={filters.branch}
-            onChange={handleFilterChange}
-            className="border rounded-md px-4 py-2 transition duration-300 ease-in-out focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-          <input
-            type="text"
-            name="company"
-            placeholder="Filter by company"
-            value={filters.company}
-            onChange={handleFilterChange}
-            className="input-field border rounded-md px-4 py-2 transition duration-300 ease-in-out focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-          <input
-            type="text"
-            name="skills"
-            placeholder="Filter by skills"
-            value={filters.skills}
-            onChange={handleFilterChange}
-            className="border rounded-md px-4 py-2 transition duration-300 ease-in-out focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-      </div>
+              return (
+                <div
+                  key={person._id}
+                  className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 hover:bg-slate-900 transition-all flex flex-col justify-between shadow-lg shadow-black/20"
+                >
+                  <Link to={`/profile/${person._id}`} className="block group">
+                    {/* Top Identity Block */}
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-lg font-extrabold text-white uppercase shadow-md shadow-blue-500/20 shrink-0">
+                        {person.name ? person.name.slice(0, 2) : "AL"}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition truncate">
+                          {person.name}
+                        </h3>
+                        <p className="text-xs text-slate-400 truncate">
+                          {person.branch || "General Member"}
+                        </p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          Class of {person.graduationYear || "N/A"}
+                        </p>
+                      </div>
+                    </div>
 
-      {/* Alumni Grid */}
-      {loading ? (
-        <div className="text-center py-12">
-          <p className="text-xl text-gray-600">Loading alumni...</p>
-        </div>
-      ) : alumni.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-xl text-gray-600">
-            No alumni found matching your filters
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {alumni.map((person) => (
-            <div key={person._id} className="card hover:shadow-lg transition">
-              <Link to={`/profile/${person._id}`} className="cursor-pointer">
-                <div className="flex items-center mb-4">
-                  <div className="w-16 h-16 bg-linear-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-2xl">
-                    👤
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-bold">{person.name}</h3>
-                    <p className="text-gray-600 text-sm">{person.branch}</p>
-                  </div>
-                </div>
-
-                <div className="space-y-2 text-sm">
-                  {person.currentCompany && (
-                    <p>
-                      <strong>💼 Company:</strong> {person.currentCompany}
-                    </p>
-                  )}
-                  {person.designation && (
-                    <p>
-                      <strong>🎯 Designation:</strong> {person.designation}
-                    </p>
-                  )}
-                  <p>
-                    <strong>📅 Graduation:</strong> {person.graduationYear}
-                  </p>
-                </div>
-
-                {person.skills && person.skills.length > 0 && (
-                  <div className="mt-4">
-                    <p className="font-semibold mb-2">Skills:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {person.skills.slice(0, 3).map((skill, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                      {person.skills && person.skills.length > 3 && (
-                        <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">
-                          +{person.skills.length - 3} more
-                        </span>
+                    {/* Professional Info Box */}
+                    <div className="space-y-1.5 text-xs text-slate-300 mb-4 bg-slate-950/40 p-3.5 rounded-xl border border-slate-850">
+                      {person.currentCompany && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-slate-500 font-medium">Company:</span>
+                          <span className="text-slate-200 font-semibold truncate">{person.currentCompany}</span>
+                        </div>
+                      )}
+                      {person.designation && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-slate-500 font-medium">Role:</span>
+                          <span className="text-slate-200 truncate">{person.designation}</span>
+                        </div>
+                      )}
+                      {!person.currentCompany && !person.designation && (
+                        <p className="text-slate-500 italic">No workplace details provided</p>
                       )}
                     </div>
-                  </div>
-                )}
-              </Link>
 
-              <div className="flex gap-2 mt-4">
-                <Link to={`/profile/${person._id}`} className="flex-1">
-                  <button className="w-full btn-primary text-sm">
-                    👁️ View Profile
-                  </button>
-                </Link>
-                {currentUser && currentUser.role === "student" && (
-                  <button
-                    onClick={() => handleSendConnectionRequest(person._id)}
-                    disabled={
-                      requestingConnection === person._id ||
-                      sentRequests.includes(person._id)
-                    }
-                    className={`flex-1 text-sm font-semibold py-2 px-3 rounded transition ${
-                      sentRequests.includes(person._id)
-                        ? "bg-green-500 text-white cursor-not-allowed"
-                        : requestingConnection === person._id
-                        ? "bg-gray-400 text-white cursor-not-allowed"
-                        : "bg-purple-500 hover:bg-purple-600 text-white"
-                    }`}
-                  >
-                    {sentRequests.includes(person._id)
-                      ? "✓ Connected"
-                      : requestingConnection === person._id
-                      ? "⏳"
-                      : "🤝 Connect"}
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+                    {/* Skills */}
+                    {person.skills && person.skills.length > 0 && (
+                      <div className="mb-4">
+                        <div className="flex flex-wrap gap-1.5">
+                          {person.skills.slice(0, 3).map((skill, idx) => (
+                            <span
+                              key={idx}
+                              className="bg-blue-500/10 text-blue-300 border border-blue-500/20 px-2.5 py-0.5 rounded-md text-[11px] font-medium"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                          {person.skills.length > 3 && (
+                            <span className="bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md text-[11px]">
+                              +{person.skills.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </Link>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 pt-3 border-t border-slate-800 mt-2">
+                    <Link to={`/profile/${person._id}`} className="flex-1">
+                      <button className="w-full py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition border border-slate-700/80 active:scale-95">
+                        View Profile
+                      </button>
+                    </Link>
+
+                    {currentUser && currentUser.role === "student" && (
+                      <button
+                        onClick={() => handleSendConnectionRequest(person._id)}
+                        disabled={isPending || isSent}
+                        className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition active:scale-95 flex items-center justify-center gap-1.5 ${
+                          isSent
+                            ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 cursor-default"
+                            : isPending
+                            ? "bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-700"
+                            : "bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/20"
+                        }`}
+                      >
+                        {isSent ? (
+                          <>
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>Connected</span>
+                          </>
+                        ) : isPending ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-slate-400/30 border-t-slate-400 rounded-full animate-spin" />
+                            <span>Sending...</span>
+                          </>
+                        ) : (
+                          "Connect"
+                        )}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

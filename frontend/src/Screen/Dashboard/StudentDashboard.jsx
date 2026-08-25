@@ -32,10 +32,7 @@ function StudentDashboard({ user }) {
       }
 
       // Fetch recent jobs
-      const jobResponse = await fetch(
-        
-        "http://localhost:5000/api/jobs"
-      );
+      const jobResponse = await fetch("http://localhost:5000/api/jobs");
       const jobData = await jobResponse.json();
       if (jobData.success) {
         setJobs(jobData.data.slice(0, 5));
@@ -113,188 +110,322 @@ function StudentDashboard({ user }) {
   };
 
   if (loading) {
-    return <div className="text-center py-12">Loading dashboard...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] bg-slate-950 text-slate-300">
+        <div className="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4" />
+        <p className="text-sm font-medium text-slate-400">Loading student dashboard...</p>
+      </div>
+    );
   }
 
+  const statMetrics = [
+    {
+      title: "My Connections",
+      value: connections.length,
+      color: "text-blue-400",
+      badge: "Alumni network",
+    },
+    {
+      title: "Pending Requests",
+      value: pendingRequests.length,
+      color: "text-amber-400",
+      badge: "Awaiting review",
+    },
+    {
+      title: "Open Roles",
+      value: jobs.length,
+      color: "text-purple-400",
+      badge: "Active feeds",
+    },
+    {
+      title: "Upcoming Sessions",
+      value: events.length,
+      color: "text-emerald-400",
+      badge: "Community events",
+    },
+  ];
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-bold mb-8">Welcome, {user.name}! 👋</h1>
+    <div className="min-h-screen bg-slate-950 text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold tracking-wide uppercase mb-3">
+              Student Workspace
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+              Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">{user.name}</span>
+            </h1>
+            <p className="text-sm text-slate-400 mt-1">
+              Track your network connections, explore jobs posted by alumni, and RSVP for events.
+            </p>
+          </div>
+        </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12 shadow-md rounded-2xl bg-gray-300 ">
-        <div className="card text-center">
-          <div className="text-3xl font-bold text-blue-600">
-            {connections.length}
-          </div>
-          <p className="text-gray-600">Connections</p>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {statMetrics.map((stat, idx) => (
+            <div
+              key={idx}
+              className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-lg shadow-black/20 flex flex-col justify-between"
+            >
+              <span className="text-xs uppercase font-bold tracking-wider text-slate-400">
+                {stat.title}
+              </span>
+              <div className="mt-4 flex items-baseline justify-between">
+                <span className={`text-3xl font-extrabold ${stat.color}`}>
+                  {stat.value}
+                </span>
+                <span className="text-[10px] font-semibold text-slate-500">
+                  {stat.badge}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="card text-center">
-          <div className="text-3xl font-bold text-green-600">
-            {pendingRequests.length}
-          </div>
-          <p className="text-gray-600">Pending Requests</p>
-        </div>
-        <div className="card text-center">
-          <div className="text-3xl font-bold text-purple-600">
-            {jobs.length}
-          </div>
-          <p className="text-gray-600">Job Opportunities  for student</p>
-        </div>
-        <div className="card text-center">
-          <div className="text-3xl font-bold text-orange-600">
-            {events.length}
-          </div>
-          <p className="text-gray-600">Upcoming Events</p>
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Pending Requests */}
-          {pendingRequests.length > 0 && (
-            <div className="card">
-              <h2 className="text-2xl font-bold mb-4">Connection Requests</h2>
-              <div className="space-y-4">
-                {pendingRequests.map((req) => (
-                  <div
-                    key={req._id}
-                    className="border-l-4 border-blue-500 pl-4 py-2"
-                  >
-                    <p className="font-semibold">{req.requester.name}</p>
-                    {req.message && (
-                      <p className="text-gray-600 text-sm">{req.message}</p>
-                    )}
-                    <div className="flex gap-2 mt-2">
-                      <button
-                        onClick={() => handleAcceptRequest(req._id)}
-                        disabled={processingRequest === req._id}
-                        className="btn-primary text-sm disabled:opacity-50"
+        {/* Two Column Layout: Main Content & Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* Main Feed Column */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Pending Requests Alert Card */}
+            {pendingRequests.length > 0 && (
+              <div className="bg-slate-900 border border-blue-500/30 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="flex items-center gap-2 mb-6">
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse" />
+                  <h2 className="text-lg font-bold text-white tracking-tight">
+                    Pending Connection Requests ({pendingRequests.length})
+                  </h2>
+                </div>
+
+                <div className="space-y-4">
+                  {pendingRequests.map((req) => (
+                    <div
+                      key={req._id}
+                      className="p-4 bg-slate-950/60 border border-slate-800 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div>
+                        <h4 className="text-sm font-bold text-white">
+                          {req.requester.name}
+                        </h4>
+                        {req.message && (
+                          <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                            "{req.message}"
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => handleAcceptRequest(req._id)}
+                          disabled={processingRequest === req._id}
+                          className="py-1.5 px-3.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-md shadow-blue-600/20 active:scale-95 transition"
+                        >
+                          {processingRequest === req._id ? "Processing..." : "Accept"}
+                        </button>
+                        <button
+                          onClick={() => handleDeclineRequest(req._id)}
+                          disabled={processingRequest === req._id}
+                          className="py-1.5 px-3.5 bg-slate-800 hover:bg-slate-750 disabled:opacity-50 text-slate-300 font-semibold text-xs rounded-xl border border-slate-750 active:scale-95 transition"
+                        >
+                          {processingRequest === req._id ? "Processing..." : "Decline"}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Recent Jobs Feed */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-lg font-bold text-white">Latest Opportunities</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Fresh vacancies and internships shared by network alumni.
+                  </p>
+                </div>
+                <Link
+                  to="/jobs"
+                  className="text-xs font-semibold text-blue-400 hover:text-blue-300 transition"
+                >
+                  View All Openings →
+                </Link>
+              </div>
+
+              <div className="divide-y divide-slate-850">
+                {jobs.map((job) => (
+                  <div key={job._id} className="py-4 first:pt-0 last:pb-0">
+                    <div className="flex justify-between items-start gap-4">
+                      <div>
+                        <h3 className="font-bold text-sm text-white">{job.title}</h3>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {job.company} • {job.location}
+                        </p>
+                        <p className="text-xs text-slate-300 mt-2 line-clamp-2 leading-relaxed">
+                          {job.description}
+                        </p>
+                      </div>
+                      <Link
+                        to="/jobs"
+                        className="py-1.5 px-3 bg-slate-800 hover:bg-slate-750 text-slate-300 rounded-xl text-xs font-semibold border border-slate-700/80 active:scale-95 transition shrink-0"
                       >
-                        {processingRequest === req._id
-                          ? "Processing..."
-                          : "Accept"}
-                      </button>
-                      <button
-                        onClick={() => handleDeclineRequest(req._id)}
-                        disabled={processingRequest === req._id}
-                        className="btn-secondary text-sm disabled:opacity-50"
-                      >
-                        {processingRequest === req._id
-                          ? "Processing..."
-                          : "Decline"}
-                      </button>
+                        Apply
+                      </Link>
                     </div>
                   </div>
                 ))}
+                {jobs.length === 0 && (
+                  <p className="text-xs text-slate-500 py-6 text-center italic">
+                    No active job postings right now. Check back soon!
+                  </p>
+                )}
               </div>
             </div>
-          )}
 
-          {/* Recent Jobs */}
-          <div className="card rounded-2xl bg-gray-100 shadow-2xl p-2">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold p-2">Recent Job Postings</h2>
-              <Link to="/jobs" className="text-blue-600 hover:underline pt-2">
-                View All
-              </Link>
-            </div>
-            <div className="space-y-4">
-              {jobs.map((job) => (
-                <div key={job._id} className="border-b pb-4 last:border-b-0">
-                  <h3 className="font-bold">{job.title}</h3>
-                  <p className="text-gray-600 text-sm">
-                    {job.company} • {job.location}
-                  </p>
-                  <p className="text-sm mt-2">
-                    {job.description.substring(0, 100)}...
+            {/* Upcoming Events Feed */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-lg font-bold text-white">Upcoming Community Sessions</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Workshops, webinars, and mock rounds scheduled by mentors.
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
+                <Link
+                  to="/events"
+                  className="text-xs font-semibold text-blue-400 hover:text-blue-300 transition"
+                >
+                  View All Events →
+                </Link>
+              </div>
 
-          {/* Upcoming Events */}
-          <div className="card border-l-4 border-blue-500 bg-gray-100 shadow-2xl p-2 ">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">Upcoming Events</h2>
-              <Link to="/events" className="text-blue-600 hover:underline">
-                View All
-              </Link>
-            </div>
-            <div className="space-y-4">
-              {events.map((event) => (
-                <div key={event._id} className="border-b pb-4 last:border-b-0">
-                  <h3 className="font-bold">{event.title}</h3>
-                  <p className="text-gray-600 text-sm">{event.location}</p>
-                  <p className="text-sm mt-2">
-                    {new Date(event.startDate).toLocaleDateString()}
+              <div className="divide-y divide-slate-850">
+                {events.map((event) => (
+                  <div key={event._id} className="py-4 first:pt-0 last:pb-0">
+                    <div className="flex justify-between items-start gap-4">
+                      <div>
+                        <h3 className="font-bold text-sm text-white">{event.title}</h3>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          📍 {event.location} • {new Date(event.startDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <Link
+                        to="/events"
+                        className="py-1.5 px-3 bg-slate-800 hover:bg-slate-750 text-slate-300 rounded-xl text-xs font-semibold border border-slate-700/80 active:scale-95 transition shrink-0"
+                      >
+                        Details
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+                {events.length === 0 && (
+                  <p className="text-xs text-slate-500 py-6 text-center italic">
+                    No upcoming events found.
                   </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="space-y-6">
+            {/* Student Profile Card */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-sm uppercase">
+                  {user.name ? user.name.slice(0, 2) : "ST"}
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">{user.name}</h3>
+                  <span className="text-[11px] text-blue-400 capitalize font-medium">
+                    Student Member
+                  </span>
+                </div>
+              </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6 bg-gray-100 p-3 rounded-2xl shadow-2xl ">
-          {/* Profile Card */}
-          <div className="card">
-            <h3 className="text-xl font-bold mb-4">My Profile</h3>
-            <div className="space-y-2 text-sm">
-              <p>
-                <strong>Branch:</strong> {user.branch}
-              </p>
-              <p>
-                <strong>Graduation:</strong> {user.graduationYear}
-              </p>
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
-            </div>
-            <button
-              onClick={() => navigate("/edit-profile")}
-              className="w-full btn-primary mt-4"
-            >
-              ✏️ Edit Profile
-            </button>
-          </div>
+              <div className="space-y-2 text-xs text-slate-300 py-3 border-y border-slate-850">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Domain</span>
+                  <span className="font-semibold text-white truncate max-w-[140px]">{user.branch || "General"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Graduation</span>
+                  <span className="font-semibold text-white">Class of {user.graduationYear || "N/A"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Email</span>
+                  <span className="font-semibold text-white truncate max-w-[140px]">{user.email}</span>
+                </div>
+              </div>
 
-          {/* Quick Actions */}
-          <div className="card">
-            <h3 className="text-xl font-bold mb-4">Quick Actions</h3>
-            <div className="space-y-2">
-              <Link to="/alumni" className="block btn-primary text-center">
-                Find Alumni
-              </Link>
-              <Link to="/jobs" className="block btn-secondary text-center">
-                Browse Jobs
-              </Link>
-              <Link to="/events" className="block btn-secondary text-center">
-                View Events
-              </Link>
+              <button
+                onClick={() => navigate("/edit-profile")}
+                className="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-semibold rounded-xl border border-slate-750 active:scale-95 transition"
+              >
+                Edit Profile Details
+              </button>
             </div>
-          </div>
 
-          {/* Connections */}
-          <div className="card">
-            <h3 className="text-xl font-bold mb-4">My Connections</h3>
-            <div className="space-y-2">
-              {connections.slice(0, 5).map((conn) => (
-                <div key={conn._id} className="text-sm">
-                  <p className="font-semibold">
-                    {conn.requester._id === user._id
-                      ? conn.recipient.name
-                      : conn.requester.name}
+            {/* Quick Actions Card */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+              <h3 className="text-xs uppercase font-bold tracking-wider text-slate-400 mb-4">
+                Quick Shortcuts
+              </h3>
+              <div className="space-y-2.5 text-xs">
+                <Link
+                  to="/alumni"
+                  className="block w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-center rounded-xl shadow-md shadow-blue-600/20 active:scale-95 transition"
+                >
+                  Find Alumni Mentors
+                </Link>
+                <Link
+                  to="/jobs"
+                  className="block w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-750 text-slate-200 font-semibold text-center rounded-xl border border-slate-750 active:scale-95 transition"
+                >
+                  Browse Job Board
+                </Link>
+                <Link
+                  to="/events"
+                  className="block w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-750 text-slate-200 font-semibold text-center rounded-xl border border-slate-750 active:scale-95 transition"
+                >
+                  Explore Events
+                </Link>
+              </div>
+            </div>
+
+            {/* My Connections Card */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+              <h3 className="text-xs uppercase font-bold tracking-wider text-slate-400 mb-4">
+                Active Connections ({connections.length})
+              </h3>
+              <div className="space-y-3 text-xs">
+                {connections.slice(0, 5).map((conn) => (
+                  <div
+                    key={conn._id}
+                    className="flex items-center justify-between p-2 rounded-xl bg-slate-950/40 border border-slate-850"
+                  >
+                    <span className="font-medium text-slate-300 truncate">
+                      {conn.requester._id === user._id
+                        ? conn.recipient.name
+                        : conn.requester.name}
+                    </span>
+                    <span className="text-[10px] text-blue-400 font-semibold shrink-0">Connected</span>
+                  </div>
+                ))}
+                {connections.length > 5 && (
+                  <p className="text-[11px] text-slate-500 text-center pt-1">
+                    +{connections.length - 5} more connections
                   </p>
-                </div>
-              ))}
+                )}
+                {connections.length === 0 && (
+                  <p className="text-slate-500 italic text-center py-2">No connections yet.</p>
+                )}
+              </div>
             </div>
-            {connections.length > 5 && (
-              <p className="text-sm text-gray-600 mt-2">
-                +{connections.length - 5} more
-              </p>
-            )}
           </div>
         </div>
       </div>

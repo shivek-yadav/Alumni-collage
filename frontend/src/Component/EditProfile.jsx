@@ -118,41 +118,83 @@ function EditProfile({ user, setUser }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-xl text-gray-600">Loading profile...</p>
+      <div className="flex flex-col items-center justify-center min-h-[70vh] bg-slate-950 text-slate-300">
+        <div className="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4" />
+        <p className="text-sm font-medium text-slate-400">Loading profile data...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="bg-white rounded-lg shadow-2xl p-8">
-        <h1 className="text-4xl font-bold mb-2">Edit Profile</h1>
-        <p className="text-gray-600 mb-8">Update your profile information</p>
+    <div className="min-h-screen bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Page Header */}
+        <div className="mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold tracking-wide uppercase mb-3">
+            Account Settings
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+            Edit Profile
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Update your public profile, domain credentials, and career background.
+          </p>
+        </div>
 
-        {/* Error Message */}
+        {/* Error Alert */}
         {error && (
-          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-            {error}
+          <div className="flex items-start gap-3 bg-red-500/10 border border-red-500/30 text-red-400 px-5 py-4 rounded-2xl text-sm mb-6 shadow-lg shadow-red-500/5">
+            <svg
+              className="w-5 h-5 shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{error}</span>
           </div>
         )}
 
-        {/* Success Message */}
+        {/* Success Alert */}
         {success && (
-          <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-            {success}
+          <div className="flex items-start gap-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-5 py-4 rounded-2xl text-sm mb-6 shadow-lg shadow-emerald-500/5">
+            <svg
+              className="w-5 h-5 shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span>{success}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Basic Information */}
-          <div className="border-b pb-6">
-            <h2 className="text-2xl font-bold mb-4">Basic Information</h2>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Section 1: Basic Information */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <h2 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-500" />
+              Basic Information
+            </h2>
+            <p className="text-xs text-slate-400 mb-6">
+              Your primary details visible to other network members.
+            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Name */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-semibold mb-2 border-red">
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                   Full Name *
                 </label>
                 <input
@@ -160,15 +202,15 @@ function EditProfile({ user, setUser }) {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="input-field  border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g., Alex Morgan"
+                  className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
                   required
                 />
               </div>
 
-              {/* Branch */}
               <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Branch/Department
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  Field / Branch
                 </label>
                 <input
                   type="text"
@@ -176,13 +218,12 @@ function EditProfile({ user, setUser }) {
                   value={formData.branch}
                   onChange={handleChange}
                   placeholder="e.g., Computer Science"
-                  className="input-field border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
                 />
               </div>
 
-              {/* Graduation Year */}
               <div>
-                <label className="block text-sm font-semibold mb-2">
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                   Graduation Year
                 </label>
                 <input
@@ -191,137 +232,151 @@ function EditProfile({ user, setUser }) {
                   value={formData.graduationYear}
                   onChange={handleChange}
                   placeholder="e.g., 2024"
-                  className="input-field border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   min="1990"
                   max={new Date().getFullYear() + 10}
+                  className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
                 />
               </div>
             </div>
 
-            {/* Bio */}
-            <div className="mt-6">
-              <label className="block text-sm font-semibold mb-2">Bio</label>
+            <div className="mt-5">
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  Biography
+                </label>
+                <span className="text-[11px] text-slate-500">Max 500 chars</span>
+              </div>
               <textarea
                 name="bio"
                 value={formData.bio}
                 onChange={handleChange}
-                placeholder="Tell us about yourself..."
-                className="input-field  text-center border border-gray-300 rounded-md 
-                px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                maxLength={500}
+                placeholder="Share a short summary about your background, career focus, and goals..."
                 rows="4"
-              ></textarea>
-              <p className="text-xs text-gray-500 mt-1 ">
-                Maximum 500 characters
-              </p>
+                className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
+              />
             </div>
           </div>
 
-          {/* Professional Information */}
-          <div className="border-b pb-6">
-            <h2 className="text-2xl font-bold mb-4">
+          {/* Section 2: Professional Information */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <h2 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
               Professional Information
             </h2>
+            <p className="text-xs text-slate-400 mb-6">
+              Your current workplace role and technical competencies.
+            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Current Company */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Current Company
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  Current Company / Organization
                 </label>
                 <input
                   type="text"
                   name="currentCompany"
                   value={formData.currentCompany}
                   onChange={handleChange}
-                  placeholder="e.g., Google, Microsoft"
-                  className="input-field border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g., Tech Corp, StartUp Labs"
+                  className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
                 />
               </div>
 
-              {/* Designation */}
               <div>
-                <label className="block text-sm font-semibold mb-2">
-                  Designation/Job Title
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  Designation / Role
                 </label>
                 <input
                   type="text"
                   name="designation"
                   value={formData.designation}
                   onChange={handleChange}
-                  placeholder="e.g., Senior Developer"
-                  className="input-field border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g., Full Stack Engineer"
+                  className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
                 />
               </div>
             </div>
 
-            {/* Skills */}
-            <div className="mt-6">
-              <label className="block text-sm font-semibold mb-2">Skills</label>
+            <div className="mt-5">
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                Skills & Tech Stack
+              </label>
               <textarea
                 name="skills"
                 value={formData.skills}
                 onChange={handleChange}
-                placeholder="Enter skills separated by commas (e.g., JavaScript, React, Node.js)"
-                className="input-field  border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="JavaScript, React, Node.js, Python, System Architecture"
                 rows="3"
-              ></textarea>
-              <p className="text-xs text-gray-500 mt-1">
-                Separate multiple skills with commas
+                className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
+              />
+              <p className="text-[11px] text-slate-500 mt-1.5">
+                Separate individual skills with commas.
               </p>
             </div>
           </div>
 
-          {/* Social Links */}
-          <div className="border-b pb-6">
-            <h2 className="text-2xl font-bold mb-4">Social Links</h2>
+          {/* Section 3: Social & Portfolio Profiles */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <h2 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-purple-500" />
+              Social & Portfolio Profiles
+            </h2>
+            <p className="text-xs text-slate-400 mb-6">
+              External links for recruiters, peers, and potential mentees.
+            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* LinkedIn */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-semibold mb-2">
-                  LinkedIn Profile
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  LinkedIn URL
                 </label>
                 <input
                   type="url"
                   name="linkedin"
                   value={formData.linkedin}
                   onChange={handleChange}
-                  placeholder="https://linkedin.com/in/yourprofile"
-                  className="input-field border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="https://linkedin.com/in/username"
+                  className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
                 />
               </div>
 
-              {/* GitHub */}
               <div>
-                <label className="block text-sm font-semibold mb-2">
-                  GitHub Profile
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  GitHub URL
                 </label>
                 <input
                   type="url"
                   name="github"
                   value={formData.github}
                   onChange={handleChange}
-                  placeholder="https://github.com/yourprofile"
-                  className="input-field  border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="https://github.com/username"
+                  className="w-full px-4 py-3 bg-slate-800/70 border border-slate-700/80 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-150"
                 />
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-4 pt-6">
+          <div className="flex items-center gap-4 pt-2">
             <button
               type="submit"
-              className="btn-primary py-3 px-6 font-semibold
-              bg-blue-500 text-white  rounded"
               disabled={submitting}
+              className="py-3.5 px-6 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800/40 text-white font-semibold text-sm rounded-xl shadow-lg shadow-blue-600/25 active:scale-95 transition flex items-center gap-2"
             >
-              {submitting ? "Saving..." : "Save Changes"}
+              {submitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Saving Changes...</span>
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </button>
             <button
               type="button"
               onClick={() => navigate("/profile")}
-              className=" py-3 px-6 font-semibold bg-blue-500 text-white  rounded"
+              className="py-3.5 px-6 bg-slate-800 hover:bg-slate-750 text-slate-300 font-semibold text-sm rounded-xl border border-slate-700/80 active:scale-95 transition"
             >
               Cancel
             </button>
