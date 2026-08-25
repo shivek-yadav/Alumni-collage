@@ -4,9 +4,7 @@ dns.setServers(['8.8.8.8', '8.8.4.4']);
 import dotenv from 'dotenv';
 dotenv.config(); // 🌿 Load Environment Variables
 
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
+import express from 'express';import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -54,7 +52,7 @@ if (process.env.NODE_ENV === 'production') {
     const frontendPath = path.join(__dirname, '../frontend/build');
     app.use(express.static(frontendPath));
 
-    app.get('*', (req, res) => {
+  app.get('/*splat', (req, res) => {
         res.sendFile(path.resolve(frontendPath, 'index.html'));
     });
 }
