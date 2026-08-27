@@ -1,5 +1,3 @@
-import dns from 'dns';
-dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 import dotenv from 'dotenv';
 dotenv.config(); // 🌿 Load Environment Variables
@@ -25,7 +23,10 @@ import connectDB from './config/db.js';
 const app = express();
 
 // 🧩 Middleware
-app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+}));
 app.use(express.json());
 
 // 💾 Connect to MongoDB
