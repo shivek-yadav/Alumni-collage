@@ -42,14 +42,14 @@ function AlumniDashboard({ user }) {
       const token = localStorage.getItem("token");
 
       // Fetch user's jobs
-      const jobResponse = await fetch("http://localhost:5000/api/jobs");
+      const jobResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/jobs`);
       const jobData = await jobResponse.json();
       if (jobData.success) {
         setJobs(jobData.data.filter((j) => j.postedBy._id === user._id));
       }
 
       // Fetch user's events
-      const eventResponse = await fetch("http://localhost:5000/api/events");
+      const eventResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/events`);
       const eventData = await eventResponse.json();
       if (eventData.success) {
         // Show user's events sorted by approval status
@@ -63,7 +63,7 @@ function AlumniDashboard({ user }) {
 
       // Fetch connections
       const connResponse = await fetch(
-        "http://localhost:5000/api/connections",
+        `${import.meta.env.VITE_API_URL}/api/connections`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -99,7 +99,7 @@ function AlumniDashboard({ user }) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/connections/${requestId}/${action}`,
+        `${import.meta.env.VITE_API_URL}/api/connections/${requestId}/${action}`,
         {
           method: "PUT",
           headers: {
@@ -129,7 +129,7 @@ function AlumniDashboard({ user }) {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/jobs/${selectedJobForApplications._id}/applications/${applicationIndex}/${action}`,
+        `${import.meta.env.VITE_API_URL}/api/jobs/${selectedJobForApplications._id}/applications/${applicationIndex}/${action}`,
         {
           method: "PUT",
           headers: {
@@ -165,7 +165,7 @@ function AlumniDashboard({ user }) {
     setSubmitting(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/jobs", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/jobs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -228,7 +228,7 @@ function AlumniDashboard({ user }) {
         endDate: endDate,
       };
 
-      const response = await fetch("http://localhost:5000/api/events", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -812,7 +812,7 @@ function AlumniDashboard({ user }) {
 
             <div className="p-6 space-y-4">
               {selectedJobForApplications.applications &&
-              selectedJobForApplications.applications.length > 0 ? (
+                selectedJobForApplications.applications.length > 0 ? (
                 selectedJobForApplications.applications.map(
                   (application, idx) => (
                     <div

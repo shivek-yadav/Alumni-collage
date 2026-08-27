@@ -24,7 +24,7 @@ function Alumni({ user }) {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await fetch("http://localhost:5000/api/auth/me", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
@@ -32,7 +32,7 @@ function Alumni({ user }) {
         setCurrentUser(data.data);
         // Fetch sent connection requests
         const connResponse = await fetch(
-          "http://localhost:5000/api/connections",
+          `${import.meta.env.VITE_API_URL}/api/connections`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -53,7 +53,7 @@ function Alumni({ user }) {
   const fetchAlumni = async () => {
     try {
       setLoading(true);
-      let url = "http://localhost:5000/api/users?role=alumni";
+      let url = `${import.meta.env.VITE_API_URL}/api/users?role=alumni`;
 
       if (filters.branch) url += `&branch=${filters.branch}`;
       if (filters.company) url += `&company=${filters.company}`;
@@ -95,7 +95,7 @@ function Alumni({ user }) {
     setRequestingConnection(alumniId);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/connections", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/connections`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -298,13 +298,12 @@ function Alumni({ user }) {
                       <button
                         onClick={() => handleSendConnectionRequest(person._id)}
                         disabled={isPending || isSent}
-                        className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition active:scale-95 flex items-center justify-center gap-1.5 ${
-                          isSent
+                        className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition active:scale-95 flex items-center justify-center gap-1.5 ${isSent
                             ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 cursor-default"
                             : isPending
-                            ? "bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-700"
-                            : "bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/20"
-                        }`}
+                              ? "bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-700"
+                              : "bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/20"
+                          }`}
                       >
                         {isSent ? (
                           <>

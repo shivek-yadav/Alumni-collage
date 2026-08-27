@@ -30,7 +30,7 @@ function Jobs() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await fetch("http://localhost:5000/api/auth/me", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
@@ -52,7 +52,7 @@ function Jobs() {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      let url = "http://localhost:5000/api/jobs?isActive=true";
+      let url = `${import.meta.env.VITE_API_URL}/api/jobs?isActive=true`;
 
       if (filters.jobType) url += `&jobType=${filters.jobType}`;
       if (filters.company) url += `&company=${filters.company}`;
@@ -101,7 +101,7 @@ function Jobs() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/jobs/${selectedJob._id}/apply`,
+        `${import.meta.env.VITE_API_URL}/api/jobs/${selectedJob._id}/apply`,
         {
           method: "POST",
           headers: {
@@ -248,11 +248,10 @@ function Jobs() {
                       setSelectedJob(job);
                       setShowApplicationForm(false);
                     }}
-                    className={`p-5 rounded-2xl border transition-all cursor-pointer ${
-                      isSelected
+                    className={`p-5 rounded-2xl border transition-all cursor-pointer ${isSelected
                         ? "bg-slate-900 border-blue-500/80 shadow-lg shadow-blue-500/10 ring-1 ring-blue-500/50"
                         : "bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900"
-                    }`}
+                      }`}
                   >
                     <div className="flex justify-between items-start gap-4 mb-3">
                       <div>

@@ -21,7 +21,7 @@ function Events() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await fetch("http://localhost:5000/api/auth/me", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
@@ -43,7 +43,7 @@ function Events() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      let url = "http://localhost:5000/api/events";
+      let url = `${import.meta.env.VITE_API_URL}/api/events`;
 
       if (filters.eventType) url += `&eventType=${filters.eventType}`;
       if (filters.isVirtual) url += `&isVirtual=${filters.isVirtual}`;
@@ -104,7 +104,7 @@ function Events() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/events/${eventId}/register`,
+        `${import.meta.env.VITE_API_URL}/api/events/${eventId}/register`,
         {
           method: "POST",
           headers: {

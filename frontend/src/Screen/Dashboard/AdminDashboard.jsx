@@ -22,7 +22,7 @@ function AdminDashboard({ user }) {
       const token = localStorage.getItem("token");
 
       // Fetch all users
-      const userResponse = await fetch("http://localhost:5000/api/users");
+      const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users`);
       const userData = await userResponse.json();
       if (userData.success) {
         setUsers(userData.data);
@@ -40,7 +40,7 @@ function AdminDashboard({ user }) {
       }
 
       // Fetch jobs
-      const jobResponse = await fetch("http://localhost:5000/api/jobs");
+      const jobResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/jobs`);
       const jobData = await jobResponse.json();
       if (jobData.success) {
         setStats((prev) => ({
@@ -50,7 +50,7 @@ function AdminDashboard({ user }) {
       }
 
       // Fetch events
-      const eventResponse = await fetch("http://localhost:5000/api/events");
+      const eventResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/events`);
       const eventData = await eventResponse.json();
       if (eventData.success) {
         setStats((prev) => ({
@@ -70,7 +70,7 @@ function AdminDashboard({ user }) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/events/${eventId}/approve`,
+        `${import.meta.env.VITE_API_URL}/api/events/${eventId}/approve`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },
@@ -171,8 +171,8 @@ function AdminDashboard({ user }) {
           <button
             onClick={() => setActiveTab("overview")}
             className={`py-2 px-5 rounded-xl text-xs font-semibold transition ${activeTab === "overview"
-                ? "bg-purple-600 text-white shadow-md shadow-purple-600/25"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+              ? "bg-purple-600 text-white shadow-md shadow-purple-600/25"
+              : "text-slate-400 hover:text-white hover:bg-slate-800"
               }`}
           >
             System Overview
@@ -180,8 +180,8 @@ function AdminDashboard({ user }) {
           <button
             onClick={() => setActiveTab("users")}
             className={`py-2 px-5 rounded-xl text-xs font-semibold transition ${activeTab === "users"
-                ? "bg-purple-600 text-white shadow-md shadow-purple-600/25"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+              ? "bg-purple-600 text-white shadow-md shadow-purple-600/25"
+              : "text-slate-400 hover:text-white hover:bg-slate-800"
               }`}
           >
             Member Directory ({users.length})
@@ -189,8 +189,8 @@ function AdminDashboard({ user }) {
           <button
             onClick={() => setActiveTab("events")}
             className={`py-2 px-5 rounded-xl text-xs font-semibold transition flex items-center gap-2 ${activeTab === "events"
-                ? "bg-purple-600 text-white shadow-md shadow-purple-600/25"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+              ? "bg-purple-600 text-white shadow-md shadow-purple-600/25"
+              : "text-slate-400 hover:text-white hover:bg-slate-800"
               }`}
           >
             <span>Pending Approvals</span>
@@ -328,10 +328,10 @@ function AdminDashboard({ user }) {
                       <td className="py-3.5 px-4">
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase border ${u.role === "admin"
-                              ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
-                              : u.role === "alumni"
-                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                                : "bg-blue-500/10 text-blue-400 border-blue-500/20"
+                            ? "bg-purple-500/10 text-purple-400 border-purple-500/20"
+                            : u.role === "alumni"
+                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                              : "bg-blue-500/10 text-blue-400 border-blue-500/20"
                             }`}
                         >
                           {u.role}
@@ -341,8 +341,8 @@ function AdminDashboard({ user }) {
                       <td className="py-3.5 px-4">
                         <span
                           className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${u.isVerified
-                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                              : "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                            : "bg-amber-500/10 text-amber-400 border-amber-500/20"
                             }`}
                         >
                           {u.isVerified ? "Verified" : "Pending"}

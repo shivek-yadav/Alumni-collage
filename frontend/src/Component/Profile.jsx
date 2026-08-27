@@ -13,7 +13,7 @@ function Profile() {
     // Get current logged-in user
     const token = localStorage.getItem("token");
     if (token) {
-      fetch("http://localhost:5000/api/auth/me", {
+      fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
@@ -33,7 +33,7 @@ function Profile() {
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/users/${id}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/${id}`);
       const data = await response.json();
 
       if (data.success) {
@@ -106,9 +106,8 @@ function Profile() {
                       {user.name}
                     </h1>
                     <span
-                      className={`text-xs px-3 py-1 rounded-full font-semibold border ${
-                        roleStyles[user.role] || roleStyles.student
-                      }`}
+                      className={`text-xs px-3 py-1 rounded-full font-semibold border ${roleStyles[user.role] || roleStyles.student
+                        }`}
                     >
                       {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </span>

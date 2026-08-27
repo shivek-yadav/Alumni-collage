@@ -86,7 +86,7 @@ function EditProfile({ user, setUser }) {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/updatedetails",
+        `${import.meta.env.VITE_API_URL}/api/auth/updatedetails`,
         {
           method: "PUT",
           headers: {

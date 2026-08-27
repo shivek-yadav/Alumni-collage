@@ -20,7 +20,7 @@ function StudentDashboard({ user }) {
 
       // Fetch connections
       const connResponse = await fetch(
-        "http://localhost:5000/api/connections",
+        `${import.meta.env.VITE_API_URL}/api/connections`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -32,14 +32,14 @@ function StudentDashboard({ user }) {
       }
 
       // Fetch recent jobs
-      const jobResponse = await fetch("http://localhost:5000/api/jobs");
+      const jobResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/jobs`);
       const jobData = await jobResponse.json();
       if (jobData.success) {
         setJobs(jobData.data.slice(0, 5));
       }
 
       // Fetch upcoming events
-      const eventResponse = await fetch("http://localhost:5000/api/events");
+      const eventResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/events`);
       const eventData = await eventResponse.json();
       if (eventData.success) {
         setEvents(eventData.data.slice(0, 5));
@@ -56,7 +56,7 @@ function StudentDashboard({ user }) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/connections/${requestId}/accept`,
+        `${import.meta.env.VITE_API_URL}/api/connections/${requestId}/accept`,
         {
           method: "PUT",
           headers: {
@@ -85,7 +85,7 @@ function StudentDashboard({ user }) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/connections/${requestId}/decline`,
+        `${import.meta.env.VITE_API_URL}/api/connections/${requestId}/decline`,
         {
           method: "PUT",
           headers: {

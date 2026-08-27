@@ -28,7 +28,7 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -165,7 +165,7 @@ function Register() {
               >
                 <option value="student" className="bg-slate-900 text-slate-100">Student</option>
                 <option value="alumni" className="bg-slate-900 text-slate-100">Alumni</option>
-                
+
               </select>
             </div>
           </div>
